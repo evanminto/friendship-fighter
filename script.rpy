@@ -7,7 +7,7 @@ define announcer = Character("Announcer")
 define max_character = Character("Max")
 define coach = Character("Coach")
 define inferno = Character("Hurik")
-define thought = Character(None, what_italic=True, what_alt="Joe, thinking, [text]")
+define thought = Character(None, what_italic=True, what_alt="Max, thinking, [text]")
 
 default round = 1
 
@@ -33,8 +33,8 @@ default opponent_strike_dmg = 20
 default opponent_block_dmg = 0
 default opponent_throw_dmg = 30
 
-image goggles_img = im.FactorScale("goggles.png", 0.1275, xalign=0.075, yalign=1.0, alt="Goggles standing in a fighting position. He has wiry hair and is wearing sports goggles.")
-image goggles_energy_img = im.FactorScale("goggles energy.png", 0.1275, xalign=0.075, yalign=1.0, alt="Goggles standing in a fighting position with glowing balls of energy on his hands")
+image goggles_img = im.FactorScale("goggles.png", 0.1275, xalign=0.125, yalign=1.0, alt="Goggles standing in a fighting position. He has wiry hair and is wearing sports goggles.")
+image goggles_energy_img = im.FactorScale("goggles energy.png", 0.1275, xalign=0.125, yalign=1.0, alt="Goggles standing in a fighting position with glowing balls of energy on his hands")
 image inferno_img = im.FactorScale("inferno.png", 0.14, xalign=0.925, yalign=1.0, alt="The Inferno standing in a fighting position. He is muscular and bald, with a large scar on his cheek.")
 image inferno_fire_img = im.FactorScale("inferno fire.png", 0.14, xalign=0.925, yalign=1.0, alt="The Inferno standing in a fighting position. His arms are on fire and he has hair made out of fire")
 
@@ -66,7 +66,7 @@ image infinity_img = im.FactorScale("infinity.png", 0.3, xalign=0.5, yalign=0.05
 
 image player_health_text = renpy.ParameterizedText()
 image opponent_health_text = renpy.ParameterizedText()
-image combo_text = renpy.ParameterizedText(xalign=0.075, yalign=0.25, size=40, font="fonts/PermanentMarker-Regular.ttf")
+image combo_text = renpy.ParameterizedText(xalign=0.09, yalign=0.25, size=40, font="fonts/PermanentMarker-Regular.ttf")
 image friendship_text = renpy.ParameterizedText()
 
 label update_friendship:
@@ -192,12 +192,12 @@ label update_status:
     return
 
 label round1_start:
-    show goggles_img
-    show inferno_img
-
-    narrator "Coach is ringside, giving Max some final advice."
+    narrator "Coach is giving Max some advice before he steps into the ring." with fade
 
     coach "In the first round Hurik usually sticks with a pretty simple pattern. He does each move once, then repeats. But you'll have to figure out what order they're in!"
+
+    show goggles_img
+    show inferno_img
 
     narrator "Max and Hurik step into the ring."
 
@@ -244,7 +244,7 @@ label round1_start:
 
     show infinity_img
 
-    announcer "Round 1, START!"
+    announcer "Round 1, START!" with fade
 
     jump round1
 
@@ -277,7 +277,7 @@ label round2_start:
         max_combo = 0
     call update_status
 
-    announcer "Round 2, START!"
+    announcer "Round 2, START!" with fade
 
     jump round2
 
@@ -360,7 +360,7 @@ label round3_start:
 
     call update_status
 
-    announcer "Round 3, START!"
+    announcer "Round 3, START!" with fade
 
     jump round3
 
