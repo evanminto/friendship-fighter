@@ -3,13 +3,13 @@
 # Declare characters used by this game. The color argument colorizes the
 # name of the character.
 
-define announcer = Character("Announcer")
-define max_character = Character("Max")
-define coach = Character("Coach")
-define inferno = Character("Hurik")
+define announcer = Character("Announcer", color="#bcdce9")
+define max_character = Character("Max", color="#139DD8")
+define coach = Character("Coach", color="#5bdb3a")
+define inferno = Character("Inferno", color="#ef723b")
 define thought = Character(None, what_italic=True, what_alt="Max, thinking, [text]")
 
-default round = 1
+default current_round = 1
 
 default player_health = 100
 default opponent_health = 100
@@ -273,7 +273,7 @@ label round2_start:
 
     call update_friendship
     python:
-        round = 2
+        current_round = 2
         round_end = False
         player_health = 100
         opponent_health = 100
@@ -369,7 +369,7 @@ label round3_start:
     call update_friendship
 
     python:
-        round = 3
+        current_round = 3
         round_end = False
         player_health = 100
         opponent_health = 100
@@ -438,9 +438,9 @@ label check_health:
                 "Goggles wins this round!"
                 python:
                     round_end = True
-                    if round == 1:
+                    if current_round == 1:
                         won_round_1 = True
-                    elif round == 2:
+                    elif current_round == 2:
                         won_round_2 = True
 
     return
