@@ -22,6 +22,9 @@ default round_end = False
 default match_end = False
 default won_match = False
 
+default won_round_1 = False
+default won_round_2 = False
+
 default min_friendship = 75
 default combo = 0
 default max_combo = 0
@@ -81,32 +84,26 @@ label start:
 
     coach "Alright Max, this is it, your big debut fight! How are you feeling?"
 
-    max_character "..."
+    max_character "I-I'm not sure I can do this. I just barely made it out of my last fight. I don't stand a chance against this {b}\"Inferno\"{/b} guy!"
 
-    coach "Something the matter?"
-
-    max_character "I-I'm not sure I can do this. I just barely made it out of my last fight, and now I have to go against this guy in the first round of the tournament? I don't stand a chance!"
-
-    coach "It's true, Hurik Saroyan is a dangerous guy. They don't call him {b}\"The Inferno\"{/b} for nothing."
-    coach "But you'll be alright as long as you stick to your training. Remember, every turn you can choose to either {b}STRIKE{/b}, {b}BLOCK{/b}, or {b}THROW{/b}."
-    coach "You'll need to predict which of those moves Hurik is going to do and choose the right move to counter him."
+    coach "You'll be alright as long as you stick to your training. Remember, every turn you can choose to either {b}STRIKE{/b}, {b}BLOCK{/b}, or {b}THROW{/b}."
+    coach "But Inferno will be choosing his own moves every turn too. You need to pick the right one to beat his move."
     coach "{b}BLOCKS stop STRIKES{/b}, {b}STRIKES interrupt THROWS{/b}, and {b}THROWS break BLOCKS{/b}. It's just like—"
 
-    max_character "Yeah yeah, it's like {b}rock paper scissors{/b}. But I'm not sure I'll be able to predict him. And he's so strong, so I can't afford to get hit too much."
+    max_character "Yeah yeah, like {b}rock paper scissors{/b}. But he's so strong, if he lands even a few moves on me I'm done for!"
 
-    coach "That's where the brains come in! Hurik follows some predictable patterns each round. If you {b}learn the patterns{/b} you can choose the right moves to beat him."
+    coach "Lucky for you, Inferno is a creature of habit. If you {b}learn his patterns{/b} you can predict his next move and choose the right move to beat him."
+
+    max_character "I sure hope this works..."
+
     coach "Oh, one more thing! Winning the match is all well and good, but you know what's more valuable than any trophy?"
 
     max_character "Not this again..."
 
     coach "That's right! {b}Friendship!{/b}"
-    coach "Hurik respects strong fighters, so you'll want to land {b}combos{/b} to show him how strong you are."
-    coach "To land a combo, just {b}land a bunch of hits in a row without getting hit yourself{/b}. Once you get hit you're back to zero!"
-    coach "If you can beat Hurik AND gain his respect, you'll have won more than just the match."
-
-    max_character "Alright alright, I'll try my best."
-
-    coach "You sure will. Give 'im hell, Max!"
+    coach "Inferno respects strong fighters, so you'll want to land {b}combos{/b} to show him how strong you are."
+    coach "To land a combo, just {b}hit him a bunch of times without getting hit yourself{/b}. Once you get hit you're back to zero!"
+    coach "If you can beat Inferno {b}and{/b} gain his respect, you'll have won more than just the match."
 
     jump round1_start
 
@@ -182,7 +179,7 @@ label update_status:
         if opponent_health >= 100:
             show healthbar_unit_10_right_img
 
-    if combo > 0:
+    if combo > 0 and not match_end:
         show combo_text "Combo " + str(combo)
     else:
         hide combo_text
@@ -194,16 +191,16 @@ label update_status:
 label round1_start:
     narrator "Coach is giving Max some advice before he steps into the ring." with fade
 
-    coach "In the first round Hurik usually sticks with a pretty simple pattern. He does each move once, then repeats. But you'll have to figure out what order they're in!"
+    coach "At the beginning of a match Inferno likes to stick to a pattern that's {b}three moves long{/b}. Pay attention and you should be able to figure it out."
 
     show goggles_img
     show inferno_img
 
-    narrator "Max and Hurik step into the ring."
+    narrator "Max and Inferno step into the ring."
 
     announcer "...winner will be determined by the best of three rounds."
 
-    announcer "Aaaand here are our fighters! The Inferno versus... Goggles!"
+    announcer "Aaaand here are our fighters! Inferno versus... Goggles!"
 
     inferno "You look scared, Goggle Boy."
 
@@ -254,12 +251,12 @@ label round1:
     if round_end:
         jump round2_start
 
-    call action("counter")
+    call action("attack")
 
     if round_end:
         jump round2_start
 
-    call action("throw")
+    call action("counter")
 
     if round_end:
         jump round2_start
@@ -277,12 +274,60 @@ label round2_start:
         max_combo = 0
     call update_status
 
+    if won_round_1:
+        coach "Great job, Max! But now that you figured out that pattern, Inferno will probably mix things up."
+        coach "Later in the match he likes to use a longer, {b}six-move{/b} pattern. Don't slip up now!"
+    else:
+        coach "Don't worry too much about it, Max. You're just getting warmed up!"
+        coach "Plus, I bet Inferno is going to stick with that {b}three-move{/b} pattern for the second round, so you have one more shot to figure it out."
+
     announcer "Round 2, START!" with fade
 
-    jump round2
+    if wins > 0:
+        jump round2_changeup
+    else:
+        jump round2_same
 
-label round2:
+label round2_same:
     call action("attack")
+
+    if round_end:
+        jump round3_start
+    if match_end:
+        jump after_round
+
+    call action("attack")
+
+    if round_end:
+        jump round3_start
+    if match_end:
+        jump after_round
+
+    call action("counter")
+
+    if round_end:
+        jump round3_start
+    if match_end:
+        jump after_round
+
+    jump round2_same
+
+label round2_changeup:
+    call action("attack")
+
+    if round_end:
+        jump round3_start
+    if match_end:
+        jump after_round
+
+    call action("attack")
+
+    if round_end:
+        jump round3_start
+    if match_end:
+        jump after_round
+
+    call action("counter")
 
     if round_end:
         jump round3_start
@@ -310,42 +355,7 @@ label round2:
     if match_end:
         jump after_round
 
-    call action("throw")
-
-    if round_end:
-        jump round3_start
-    if match_end:
-        jump after_round
-
-    call action("throw")
-
-    if round_end:
-        jump round3_start
-    if match_end:
-        jump after_round
-
-    call action("counter")
-
-    if round_end:
-        jump round3_start
-    if match_end:
-        jump after_round
-
-    call action("counter")
-
-    if round_end:
-        jump round3_start
-    if match_end:
-        jump after_round
-
-    call action("counter")
-
-    if round_end:
-        jump round3_start
-    if match_end:
-        jump after_round
-
-    jump round2
+    jump round2_changeup
 
 label round3_start:
     call update_friendship
@@ -360,16 +370,19 @@ label round3_start:
 
     call update_status
 
+    if won_round_2:
+        coach "See? I knew you could do it!"
+        coach "But now that you figured out that pattern, Inferno will probably mix things up."
+        coach "Later in the match he likes to use a longer, {b}six-move{/b} pattern. Don't slip up now!"
+    else:
+        coach "You can't win them all, right? But you'll make a comeback in the third round, I know it!"
+        coach "Plus, I bet Inferno is going to stick with that {b}six-move{/b} pattern for the third round, so you have one more shot to figure it out."
+
     announcer "Round 3, START!" with fade
 
     jump round3
 
 label round3:
-    call action("counter")
-
-    if round_end or match_end:
-        jump after_round
-
     call action("attack")
 
     if round_end or match_end:
@@ -380,17 +393,12 @@ label round3:
     if round_end or match_end:
         jump after_round
 
-    call action("throw")
-
-    if round_end or match_end:
-        jump after_round
-
     call action("counter")
 
     if round_end or match_end:
         jump after_round
 
-    call action("counter")
+    call action("attack")
 
     if round_end or match_end:
         jump after_round
@@ -428,7 +436,12 @@ label check_health:
                     won_match = True
             else:
                 "Goggles wins this round!"
-                $ round_end = True
+                python:
+                    round_end = True
+                    if round == 1:
+                        won_round_1 = True
+                    elif round == 2:
+                        won_round_2 = True
 
     return
 
@@ -504,7 +517,7 @@ menu win_quote:
         max_character "I thought you were supposed to be tough. Turns out you're just an old guy trying to cover up his baldness with that stupid fire."
         $ friendship -= 25
     "Don't mention his fire hair":
-        max_character "Phew, that was a tough one. You fought well, Hurik."
+        max_character "Phew, that was a tough one!"
         $ friendship += 10
 
 return
@@ -539,21 +552,40 @@ label after_round:
 
     if won_match:
         hide inferno_fire_img
-        narrator "Goggles catches his breath as Inferno struggles to stand back up."
+        hide goggles_energy_img
+        show goggles_img
+
+        narrator "Max catches his breath as Inferno struggles to stand back up." with fade
         call win_quote
         call update_status
 
         if friendship >= min_friendship:
+            narrator "Max holds out his hand to help Inferno stand up."
+            narrator "Inferno glares at him for a second before his expression softens."
+            narrator "He grabs Max's hand and stands up."
+
+            show inferno_img
+
             inferno "You are... strong. Stronger than I thought. It seems I have much to learn."
             inferno "Would you like to train with me sometime?"
         else:
+            narrator "Inferno leaps back to his feet and storms off."
+
+            show inferno_fire_img
+
             inferno "This is not over, Goggles Boy! The next time we fight, I will BURN you."
     else:
         hide goggles_energy_img
-        narrator "Inferno catches his breath as Goggles struggles to stand back up."
+        hide inferno_fire_img
+        show inferno_img
+
+        narrator "Inferno catches his breath as Max struggles to stand back up."
         if friendship >= min_friendship:
             inferno "You did not win, but do not be sad, boy. You fought well."
-            narrator "Inferno grabs onto Goggles' hand and pulls him up to a standing position."
+            narrator "Inferno grabs onto Max's hand and pulls him up to a standing position."
+
+            show goggles_img
+
             inferno "I like your style. Let's train together sometime."
         else:
             inferno "Pitiful. You are not worth my time, Goggles Boy."
