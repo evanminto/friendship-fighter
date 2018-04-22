@@ -38,8 +38,8 @@ default opponent_throw_dmg = 30
 
 image goggles_img = im.FactorScale("goggles.png", 0.1275, xalign=0.125, yalign=1.0, alt="Goggles standing in a fighting position. He has wiry hair and is wearing sports goggles.")
 image goggles_energy_img = im.FactorScale("goggles energy.png", 0.1275, xalign=0.125, yalign=1.0, alt="Goggles standing in a fighting position with glowing balls of energy on his hands")
-image inferno_img = im.FactorScale("inferno.png", 0.14, xalign=0.925, yalign=1.0, alt="The Inferno standing in a fighting position. He is muscular and bald, with a large scar on his cheek.")
-image inferno_fire_img = im.FactorScale("inferno fire.png", 0.14, xalign=0.925, yalign=1.0, alt="The Inferno standing in a fighting position. His arms are on fire and he has hair made out of fire")
+image inferno_img = im.FactorScale("inferno.png", 0.14, xalign=0.925, yalign=1.0, alt="Inferno standing in a fighting position. He is muscular and bald, with a large scar on his cheek.")
+image inferno_fire_img = im.FactorScale("inferno fire.png", 0.14, xalign=0.925, yalign=1.0, alt="Inferno standing in a fighting position. His arms are on fire and he has hair made out of fire")
 
 image healthbar_left_img = im.FactorScale("healthbar left.png", 0.3, xalign=0.125, yalign=0.05)
 image healthbar_unit_1_left_img = im.FactorScale("healthbar unit left.png", 0.3, xalign=0.125 - 0.03625, yalign=0.05 + 0.006667)
@@ -264,6 +264,13 @@ label round1:
     jump round1
 
 label round2_start:
+    if won_round_1:
+        coach "Great job, Max! But now that you figured out that pattern, Inferno will probably mix things up."
+        coach "Later in the match he likes to use a longer, {b}six-move{/b} pattern. Don't slip up now!"
+    else:
+        coach "Don't worry too much about it, Max. You're just getting warmed up!"
+        coach "Plus, I bet Inferno is going to stick with that {b}three-move{/b} pattern for the second round, so you have one more shot to figure it out."
+
     call update_friendship
     python:
         round = 2
@@ -273,13 +280,6 @@ label round2_start:
         combo = 0
         max_combo = 0
     call update_status
-
-    if won_round_1:
-        coach "Great job, Max! But now that you figured out that pattern, Inferno will probably mix things up."
-        coach "Later in the match he likes to use a longer, {b}six-move{/b} pattern. Don't slip up now!"
-    else:
-        coach "Don't worry too much about it, Max. You're just getting warmed up!"
-        coach "Plus, I bet Inferno is going to stick with that {b}three-move{/b} pattern for the second round, so you have one more shot to figure it out."
 
     announcer "Round 2, START!" with fade
 
@@ -358,6 +358,14 @@ label round2_changeup:
     jump round2_changeup
 
 label round3_start:
+    if won_round_2:
+        coach "See? I knew you could do it!"
+        coach "But now that you figured out that pattern, Inferno will probably mix things up."
+        coach "Later in the match he likes to use a longer, {b}six-move{/b} pattern. Don't slip up now!"
+    else:
+        coach "You can't win them all, right? But you'll make a comeback in the third round, I know it!"
+        coach "Plus, I bet Inferno is going to stick with that {b}six-move{/b} pattern for the third round, so you have one more shot to figure it out."
+
     call update_friendship
 
     python:
@@ -369,14 +377,6 @@ label round3_start:
         max_combo = 0
 
     call update_status
-
-    if won_round_2:
-        coach "See? I knew you could do it!"
-        coach "But now that you figured out that pattern, Inferno will probably mix things up."
-        coach "Later in the match he likes to use a longer, {b}six-move{/b} pattern. Don't slip up now!"
-    else:
-        coach "You can't win them all, right? But you'll make a comeback in the third round, I know it!"
-        coach "Plus, I bet Inferno is going to stick with that {b}six-move{/b} pattern for the third round, so you have one more shot to figure it out."
 
     announcer "Round 3, START!" with fade
 
@@ -422,10 +422,10 @@ label check_health:
         elif player_health <= 0:
             $ losses += 1
             if losses >= 2:
-                "That's two of three! The Inferno wins the match!"
+                "That's two of three! Inferno wins the match!"
                 $ match_end = True
             else:
-                "The Inferno wins this round!"
+                "Inferno wins this round!"
                 $ round_end = True
         elif opponent_health <= 0:
             $ wins += 1
@@ -463,6 +463,7 @@ menu:
                 max_combo = max([max_combo, combo])
             call update_status
             narrator "Both fighters punch each other at the same time." with hpunch
+            return
         elif opponent_action == "counter":
             python:
                 player_health -= opponent_block_dmg
@@ -470,6 +471,7 @@ menu:
                 max_combo = max([max_combo, combo])
             call update_status
             narrator "Goggles throws a punch but Inferno blocks it." with hpunch
+            return
         elif opponent_action == "throw":
             python:
                 opponent_health -= player_strike_dmg
@@ -477,11 +479,14 @@ menu:
                 max_combo = max([max_combo, combo])
             call update_status
             "Inferno tries to grab Goggles but he gets punched instead" with hpunch
+            return
     "Block":
         if opponent_action == "attack":
             "Inferno throws a punch but Goggles blocks it." with hpunch
+            return
         elif opponent_action == "counter":
             "The fighters are both blocking and planning their next move."
+            return
         elif opponent_action == "throw":
             python:
                 player_health -= opponent_throw_dmg
@@ -489,6 +494,7 @@ menu:
                 max_combo = max([max_combo, combo])
             call update_status
             "Goggles blocks, but Inferno manages to grab and throw him." with vpunch
+            return
     "Throw":
         if opponent_action == "attack":
             python:
@@ -497,6 +503,7 @@ menu:
                 max_combo = max([max_combo, combo])
             call update_status
             "Goggles try to grab Inferno but gets punched when he's off-guard." with hpunch
+            return
         elif opponent_action == "counter":
             python:
                 opponent_health -= player_throw_dmg
@@ -504,8 +511,10 @@ menu:
                 max_combo = max([max_combo, combo])
             call update_status
             "Inferno blocks, but Goggles manages to grab and throw him." with vpunch
+            return
         elif opponent_action == "throw":
             "Both fighters try to grab each other and tussle for a few seconds. Nobody gets hurt."
+            return
 
 return
 
@@ -523,6 +532,7 @@ menu win_quote:
 return
 
 label after_round:
+    hide infinity_img
     call update_friendship
     call update_status
 
