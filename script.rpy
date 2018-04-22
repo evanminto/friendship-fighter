@@ -4,10 +4,10 @@
 # name of the character.
 
 define announcer = Character("Announcer", color="#bcdce9")
-define max_character = Character("Max", color="#139DD8")
+define max_character = Character("Goggles", color="#139DD8")
 define coach = Character("Coach", color="#5bdb3a")
 define inferno = Character("Inferno", color="#ef723b")
-define thought = Character(None, what_italic=True, what_alt="Max, thinking, [text]")
+define thought = Character(None, what_italic=True, what_alt="Goggles, thinking, [text]")
 
 default current_round = 1
 
@@ -82,9 +82,9 @@ label update_friendship:
 label start:
     show background
 
-    coach "Alright Max, this is it, your big debut fight! How are you feeling?"
+    coach "Alright Goggles, this is it, your first fight in the tournament! How are you feeling?"
 
-    max_character "I-I'm not sure I can do this. I just barely made it out of my last fight. I don't stand a chance against this {b}\"Inferno\"{/b} guy!"
+    max_character "I-I'm not sure I can do this. I just barely survived the last tournament. I don't stand a chance against this {b}\"Inferno\"{/b} guy!"
 
     coach "You'll be alright as long as you stick to your training. Remember, every turn you can choose to either {b}STRIKE{/b}, {b}BLOCK{/b}, or {b}THROW{/b}."
     coach "But Inferno will be choosing his own moves every turn too. You need to pick the right one to beat his move."
@@ -189,14 +189,14 @@ label update_status:
     return
 
 label round1_start:
-    narrator "Coach is giving Max some advice before he steps into the ring." with fade
+    narrator "Coach is giving Goggles some advice before he steps into the ring." with fade
 
     coach "At the beginning of a match Inferno likes to stick to a pattern that's {b}three moves long{/b}. Pay attention and you should be able to figure it out."
 
     show goggles_img
     show inferno_img
 
-    narrator "Max and Inferno step into the ring."
+    narrator "Goggles and Inferno step into the ring."
 
     announcer "...winner will be determined by the best of three rounds."
 
@@ -265,10 +265,10 @@ label round1:
 
 label round2_start:
     if won_round_1:
-        coach "Great job, Max! But now that you figured out that pattern, Inferno will probably mix things up."
+        coach "Great job, Goggles! But now that you figured out that pattern, Inferno will probably mix things up."
         coach "Later in the match he likes to use a longer, {b}six-move{/b} pattern. Don't slip up now!"
     else:
-        coach "Don't worry too much about it, Max. You're just getting warmed up!"
+        coach "Don't worry too much about it, Goggles. You're just getting warmed up!"
         coach "Plus, I bet Inferno is going to stick with that {b}three-move{/b} pattern for the second round, so you have one more shot to figure it out."
 
     call update_friendship
@@ -462,6 +462,7 @@ menu:
                 combo = 0
                 max_combo = max([max_combo, combo])
             call update_status
+            play audio "sfx/PunchKick.wav"
             narrator "Both fighters punch each other at the same time." with hpunch
             return
         elif opponent_action == "counter":
@@ -470,6 +471,7 @@ menu:
                 combo = 0
                 max_combo = max([max_combo, combo])
             call update_status
+            play audio "sfx/Block.wav"
             narrator "Goggles throws a punch but Inferno blocks it." with hpunch
             return
         elif opponent_action == "throw":
@@ -478,10 +480,12 @@ menu:
                 combo += 1
                 max_combo = max([max_combo, combo])
             call update_status
+            play audio "sfx/PunchKick.wav"
             "Inferno tries to grab Goggles but he gets punched instead" with hpunch
             return
     "Block":
         if opponent_action == "attack":
+            play audio "sfx/Block.wav"
             "Inferno throws a punch but Goggles blocks it." with hpunch
             return
         elif opponent_action == "counter":
@@ -493,6 +497,7 @@ menu:
                 combo = 0
                 max_combo = max([max_combo, combo])
             call update_status
+            play audio "sfx/Throw.wav"
             "Goggles blocks, but Inferno manages to grab and throw him." with vpunch
             return
     "Throw":
@@ -502,6 +507,7 @@ menu:
                 combo = 0
                 max_combo = max([max_combo, combo])
             call update_status
+            play audio "sfx/PunchKick.wav"
             "Goggles try to grab Inferno but gets punched when he's off-guard." with hpunch
             return
         elif opponent_action == "counter":
@@ -510,6 +516,7 @@ menu:
                 combo += 1
                 max_combo = max([max_combo, combo])
             call update_status
+            play audio "sfx/Throw.wav"
             "Inferno blocks, but Goggles manages to grab and throw him." with vpunch
             return
         elif opponent_action == "throw":
@@ -565,14 +572,14 @@ label after_round:
         hide goggles_energy_img
         show goggles_img
 
-        narrator "Max catches his breath as Inferno struggles to stand back up." with fade
+        narrator "Goggles catches his breath as Inferno struggles to stand back up." with fade
         call win_quote
         call update_status
 
         if friendship >= min_friendship:
-            narrator "Max holds out his hand to help Inferno stand up."
+            narrator "Goggles holds out his hand to help Inferno stand up."
             narrator "Inferno glares at him for a second before his expression softens."
-            narrator "He grabs Max's hand and stands up."
+            narrator "He grabs Goggles's hand and stands up."
 
             show inferno_img
 
@@ -589,10 +596,10 @@ label after_round:
         hide inferno_fire_img
         show inferno_img
 
-        narrator "Inferno catches his breath as Max struggles to stand back up."
+        narrator "Inferno catches his breath as Goggles struggles to stand back up."
         if friendship >= min_friendship:
             inferno "You did not win, but do not be sad, boy. You fought well."
-            narrator "Inferno grabs onto Max's hand and pulls him up to a standing position."
+            narrator "Inferno grabs onto Goggles's hand and pulls him up to a standing position."
 
             show goggles_img
 

@@ -12,7 +12,7 @@
 ##
 ## The _() surrounding the string marks it as eligible for translation.
 
-define config.name = _("vn-fighting-game")
+define config.name = _("Friendship Fighter")
 
 
 ## Determines if the title given above is shown on the main menu screen. Set
@@ -46,8 +46,8 @@ define build.name = "vn-fighting-game"
 ## default. Setting one of these to False will hide the appropriate mixer.
 
 define config.has_sound = True
-define config.has_music = True
-define config.has_voice = True
+define config.has_music = False
+define config.has_voice = False
 
 
 ## To allow the user to play a test sound on the sound or voice channel,
