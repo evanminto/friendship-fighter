@@ -237,7 +237,7 @@ label round1_start:
     show healthbar_unit_9_right_img
     show healthbar_unit_10_right_img
 
-    call update_status from _call_update_status
+    call update_status
 
     show infinity_img
 
@@ -246,17 +246,17 @@ label round1_start:
     jump round1
 
 label round1:
-    call action("attack") from _call_action
+    call action("attack")
 
     if round_end:
         jump round2_start
 
-    call action("attack") from _call_action_1
+    call action("attack")
 
     if round_end:
         jump round2_start
 
-    call action("counter") from _call_action_2
+    call action("counter")
 
     if round_end:
         jump round2_start
@@ -271,7 +271,7 @@ label round2_start:
         coach "Don’t worry too much about it, Goggles. You’re just getting warmed up!"
         coach "Plus, I bet Inferno is going to stick with that {b}three-move{/b} pattern for the second round, so you have one more shot to figure it out."
 
-    call update_friendship from _call_update_friendship
+    call update_friendship
 
     if friendship >= 40:
         inferno "Hah, you are stronger than I thought, Goggles Boy. But I am just getting warmed up."
@@ -285,7 +285,7 @@ label round2_start:
         opponent_health = 100
         combo = 0
         max_combo = 0
-    call update_status from _call_update_status_1
+    call update_status
 
     announcer "Round 2, START!" with fade
 
@@ -295,21 +295,21 @@ label round2_start:
         jump round2_same
 
 label round2_same:
-    call action("attack") from _call_action_3
+    call action("attack")
 
     if round_end:
         jump round3_start
     if match_end:
         jump after_round
 
-    call action("attack") from _call_action_4
+    call action("attack")
 
     if round_end:
         jump round3_start
     if match_end:
         jump after_round
 
-    call action("counter") from _call_action_5
+    call action("counter")
 
     if round_end:
         jump round3_start
@@ -319,42 +319,42 @@ label round2_same:
     jump round2_same
 
 label round2_changeup:
-    call action("attack") from _call_action_6
+    call action("attack")
 
     if round_end:
         jump round3_start
     if match_end:
         jump after_round
 
-    call action("counter") from _call_action_7
+    call action("counter")
 
     if round_end:
         jump round3_start
     if match_end:
         jump after_round
 
-    call action("counter") from _call_action_8
+    call action("counter")
 
     if round_end:
         jump round3_start
     if match_end:
         jump after_round
 
-    call action("attack") from _call_action_9
+    call action("attack")
 
     if round_end:
         jump round3_start
     if match_end:
         jump after_round
 
-    call action("attack") from _call_action_10
+    call action("attack")
 
     if round_end:
         jump round3_start
     if match_end:
         jump after_round
 
-    call action("throw") from _call_action_11
+    call action("throw")
 
     if round_end:
         jump round3_start
@@ -372,7 +372,7 @@ label round3_start:
         coach "You can’t win them all, right? But you’ll make a comeback in the third round, I know it!"
         coach "Plus, I bet Inferno is going to stick with that {b}six-move{/b} pattern for the third round, so you have one more shot to figure it out."
 
-    call update_friendship from _call_update_friendship_1
+    call update_friendship
 
     if friendship >= 60:
         inferno "This is fun, this fight! You are very strong! But I will not lose to you, not today."
@@ -387,39 +387,39 @@ label round3_start:
         combo = 0
         max_combo = 0
 
-    call update_status from _call_update_status_2
+    call update_status
 
     announcer "Round 3, START!" with fade
 
     jump round3
 
 label round3:
-    call action("attack") from _call_action_12
+    call action("attack")
 
     if round_end or match_end:
         jump after_round
 
-    call action("counter") from _call_action_13
+    call action("counter")
 
     if round_end or match_end:
         jump after_round
 
-    call action("counter") from _call_action_14
+    call action("counter")
 
     if round_end or match_end:
         jump after_round
 
-    call action("attack") from _call_action_15
+    call action("attack")
 
     if round_end or match_end:
         jump after_round
 
-    call action("attack") from _call_action_16
+    call action("attack")
 
     if round_end or match_end:
         jump after_round
 
-    call action("throw") from _call_action_17
+    call action("throw")
 
     if round_end or match_end:
         jump after_round
@@ -455,8 +455,8 @@ label check_health:
     return
 
 label action(opponent_action):
-    call do_action(opponent_action) from _call_do_action
-    call check_health from _call_check_health
+    call do_action(opponent_action)
+    call check_health
 
     return
 
@@ -472,7 +472,7 @@ menu:
                 max_combo = max([max_combo, combo])
                 flavor_text = renpy.random.randint(1, 2)
 
-            call update_status from _call_update_status_3
+            call update_status
 
             if flavor_text == 1:
                 play audio "sfx/PunchKick.wav"
@@ -489,7 +489,7 @@ menu:
                 max_combo = max([max_combo, combo])
                 flavor_text = renpy.random.randint(1, 2)
 
-            call update_status from _call_update_status_4
+            call update_status
             play audio "sfx/Block.wav"
 
             if flavor_text == 1:
@@ -504,7 +504,7 @@ menu:
                 max_combo = max([max_combo, combo])
                 flavor_text = renpy.random.randint(1, 2)
 
-            call update_status from _call_update_status_5
+            call update_status
 
             if flavor_text == 1:
                 play audio "sfx/PunchKick.wav"
@@ -534,7 +534,7 @@ menu:
                 combo = 0
                 max_combo = max([max_combo, combo])
 
-            call update_status from _call_update_status_6
+            call update_status
 
             play audio "sfx/Throw.wav"
             narrator "GOGGLES: Block, INFERNO: Throw.\nGoggles blocks, but Inferno manages to grab and throw him." with vpunch
@@ -547,7 +547,7 @@ menu:
                 max_combo = max([max_combo, combo])
                 flavor_text = renpy.random.randint(1, 2)
 
-            call update_status from _call_update_status_7
+            call update_status
 
             if flavor_text == 1:
                 play audio "sfx/PunchKick.wav"
@@ -563,7 +563,7 @@ menu:
                 max_combo = max([max_combo, combo])
                 flavor_text = renpy.random.randint(1, 2)
 
-            call update_status from _call_update_status_8
+            call update_status
             play audio "sfx/Throw.wav"
             narrator "GOGGLES: Throw, INFERNO: Block.\nInferno blocks, but Goggles manages to grab and throw him." with vpunch
             return
@@ -588,8 +588,8 @@ return
 
 label after_round:
     hide infinity_img
-    call update_friendship from _call_update_friendship_2
-    call update_status from _call_update_status_9
+    call update_friendship
+    call update_status
 
     hide healthbar_left_img
     hide healthbar_unit_1_left_img
@@ -621,8 +621,8 @@ label after_round:
         show goggles_img
 
         narrator "Goggles catches his breath as Inferno struggles to stand back up." with fade
-        call win_quote from _call_win_quote
-        call update_status from _call_update_status_10
+        call win_quote
+        call update_status
 
         if friendship >= min_friendship:
             narrator "Goggles holds out his hand to help Inferno stand up."
